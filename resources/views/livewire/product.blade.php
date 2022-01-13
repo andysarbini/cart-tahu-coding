@@ -52,7 +52,7 @@
                             </div>
                             @if ($image)
                                 <label for="" class="mt-2">Image Preview</label>
-                                <img src="{{ $image->previewImage() }}" alt="Preview Image" srcset="" class="img-fluid">
+                                <img src="{{ $image->temporaryURL() }}" alt="Preview Image" srcset="" class="img-fluid">
                             @endif
                         </div>
                     </form>
