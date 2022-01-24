@@ -3,9 +3,16 @@
     <div class="col-md-8">
         <div class="card">
             <div class="card-body">
-                <h2 class="font-weight-bold">Product List</h2>
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                        <h2 class="font-weight-bold">Product List</h2>
+                    </div>
+                    <div class="col-md-6">
+                        <input wire:model="search" type="text" class="form-control" placeholder="Search Products..">
+                    </div>
+                </div>
                 <div class="row">
-                    @foreach ($products as $product)
+                    @forelse ($products as $product)
                     <div class="col-md-3 mb-3">
                         <div class="card">
                             <div class="card-body">
@@ -17,9 +24,15 @@
                             </div>
                         </div>
                     </div>
-                        
-                    @endforeach
+                        @empty {{-- jika product search not found --}} 
+                        <div class="col-sm-12 mt-5">
+                            <h2 class="text-center font-weight-bold text-primary">No Product Found</h2>
+                        </div>
+                    @endforelse
                 </div>
+            </div>
+            <div style="display:flex; justify-content:center">
+                {{ $products->links() }}
             </div>
         </div>
     </div>
@@ -53,7 +66,7 @@
                                         <a href="#" wire:click="decreaseItem('{{ $cart['rowId'] }}')" class="font-weight-bold text-secondary" style="font-size:18px">-</a>
                                         <a href="#" wire:click="removeItem('{{ $cart['rowId'] }}')" class="font-weight-bold text-danger" style="font-size:13px">X</a>
                                 </td>
-                                <td>{{ $cart['price'] }}</td>
+                                <td>Rp {{number_format($cart['price'],2,',','.') }}</td>
                             </tr>
                         @empty
                             <td colspan="3"><h6 class="text-center">Empty Cart</h6></td>
@@ -66,9 +79,9 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="font-weight-bold">Cart Summary</h4>
-                <h5 class="font-weight-bold">Sub Total: {{ $summary['sub_total'] }}</h5>
-                <h5 class="font-weight-bold">Tax: {{ $summary['pajak'] }}</h5>
-                <h5 class="font-weight-bold">Total: {{ $summary['total'] }}</h5>
+                <h5 class="font-weight-bold">Sub Total: Rp {{ number_format($summary['sub_total'],2,',','.') }}</h5>
+                <h5 class="font-weight-bold">Tax: Rp {{ number_format($summary['pajak'],2,',','.') }}</h5>
+                <h5 class="font-weight-bold">Total: Rp {{ number_format($summary['total'],2,',','.') }}</h5>
                 <div>
                     <button wire:click="enableTax" class="btn btn-primary btn-block">Add Tax</button>
                     <button wire:click="disableTax" class="btn btn-danger btn-block">Remove Tax</button>

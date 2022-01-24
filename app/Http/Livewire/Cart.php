@@ -6,14 +6,27 @@ use Livewire\Component;
 use App\Models\Product as ProductModel;
 use Attribute;
 use Carbon\Carbon;
+use Livewire\WithPagination;
 
 class Cart extends Component
 {
+
+    use WithPagination; // default pagination livewire
+
+    protected $paginationTheme = 'bootstrap'; // pagination kita gunakan bootstrap
+
     public $tax = "0%";
+
+    public $search; // binding var search di view cart.blade.php
+
+    public function updatingSearch() // lifecycle hooks
+    {
+        $this->resetPage();
+    }
 
     public function render()
     {
-        $products = ProductModel::orderBy('created_at', 'DESC')->get();
+        $products = ProductModel::where('name', 'like', '%'.$this->search.'%')->orderBy('created_at', 'DESC')->paginate(4); // eloquent
 
         $condition = new \Darryldecode\Cart\CartCondition([
             'name' => 'pajak',
