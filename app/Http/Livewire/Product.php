@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\Product as ProductModel;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Component
 {
@@ -25,5 +26,40 @@ class Product extends Component
         $this->validate([
             'image' => 'image|max:2048'
         ]);
+    }
+
+    public function store() {
+        $this->validate([
+            'name' => 'required',
+            'image' => 'image|max:2048|required',
+            'description' => 'required',
+            'qty' => 'required',
+            'price' => 'required'
+        ]);
+
+        $imageName = md5($this->image.microtime().'.'.$this->image->extension()); // penamaan file image
+
+        Storage::putFileAs(
+            'public/images',
+            $this->image,
+            $imageName
+        );
+
+        ProductModel::create([
+            'name' => $this->name,
+            'image' => $imageName,
+            'description' => $this->description,
+            'qty' => $this->qty,
+            'price' => $this->price,
+        ]);
+
+        session()->flash('info', 'Product Created Successfully');
+
+        // kosongkan semua objek agar bisa diisi kembali
+        $this->name = '';
+        $this->image = '';
+        $this->description =  '';
+        $this->qty = '';
+        $this->name = '';
     }
 }
