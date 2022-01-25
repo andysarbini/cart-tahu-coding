@@ -16,7 +16,7 @@
                     <div class="col-md-3 mb-3">
                         <div class="card">
                             <div class="card-body">
-                                <img src="{{ asset('storage/images/'.$product->image) }}" alt="" srcset="" class="img-fluid">
+                                <img src="{{ asset('storage/images/'.$product->image) }}" alt="product" srcset="" style="object-fit: contain;width:100%;height:125px">
                             </div>
                             <div class="card-footer">
                                 <h6 class="text-center font-weight-bold">{{ $product->name }}</h6>
@@ -62,9 +62,9 @@
                                     <a href="#" class="font-weight-bold text-dark">{{ $cart['name'] }}</a>
                                         <br> 
                                         Qty: {{ $cart['qty'] }}
-                                        <a href="#" wire:click="increaseItem('{{ $cart['rowId'] }}')" class="font-weight-bold text-secondary" style="font-size:18px">+</a>
-                                        <a href="#" wire:click="decreaseItem('{{ $cart['rowId'] }}')" class="font-weight-bold text-secondary" style="font-size:18px">-</a>
-                                        <a href="#" wire:click="removeItem('{{ $cart['rowId'] }}')" class="font-weight-bold text-danger" style="font-size:13px">X</a>
+                                        <i class="fas fa-plus" wire:click="increaseItem('{{ $cart['rowId'] }}')" style="font-size:13px;cursor:pointer;color:grey"></i></span>
+                                        <i class="fas fa-minus" wire:click="decreaseItem('{{ $cart['rowId'] }}')" style="font-size:13px;cursor:pointer;color:grey"></i></span>
+                                        <i class="fas fa-trash" wire:click="removeItem('{{ $cart['rowId'] }}')" style="font-size:13px;cursor:pointer;color:red"></i></span>
                                 </td>
                                 <td>Rp {{number_format($cart['price'],2,',','.') }}</td>
                             </tr>
