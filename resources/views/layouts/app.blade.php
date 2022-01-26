@@ -33,15 +33,17 @@
                 <a class="navbar-brand" href="{{ url('/home') }}">
                     Point of Sales App
                 </a>
-                <a class="navbar-brand" href="{{ url('/home') }}">
-                    Home
-                </a>
-                <a class="navbar-brand" href="{{ url('/products') }}">
-                    Products
-                </a>
-                <a class="navbar-brand" href="{{ url('/carts') }}">
-                    POS
-                </a>
+                @auth    
+                    <a class="navbar-brand" href="{{ url('/home') }}">
+                        Home
+                    </a>
+                    <a class="navbar-brand" href="{{ url('/products') }}">
+                        Products
+                    </a>
+                    <a class="navbar-brand" href="{{ url('/carts') }}">
+                        POS
+                    </a>
+                @endauth
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -75,11 +77,7 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
+                                    <livewire:auth.logout>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
