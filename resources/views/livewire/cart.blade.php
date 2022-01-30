@@ -79,20 +79,21 @@
                                 <td>Rp {{number_format($cart['price'],2,',','.') }}</td>
                             </tr>
                         @empty
-                            <td colspan="3"><h6 class="text-center">Empty Cart</h6></td>
+                            <td colspan="4"><h6 class="text-center">Empty Cart</h6></td>
                         @endforelse
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <div class="card">
+        <div class="card mt-4">
             <div class="card-body">
                 <h4 class="font-weight-bold">Cart Summary</h4>
                 <h5 class="font-weight-bold">Sub Total: Rp {{ number_format($summary['sub_total'],2,',','.') }}</h5>
                 <h5 class="font-weight-bold">Tax: Rp {{ number_format($summary['pajak'],2,',','.') }}</h5>
                 <h5 class="font-weight-bold">Total: Rp {{ number_format($summary['total'],2,',','.') }}</h5>
-                <div class="row">
+                
+                <div class="row mt-4">
                     <div class="col-sm-6">
                         <button wire:click="enableTax" class="btn btn-primary btn-block btn-sm">Add Tax</button>
                     </div>
@@ -100,10 +101,66 @@
                         <button wire:click="disableTax" class="btn btn-info btn-block btn-sm">Remove Tax</button>
                     </div>
                 </div>
-                <div class="mt-2">
-                    <button class="btn btn-success active btn-block"><i class="fas fa-save fa-lg"></i> Save Transaction</button>
+                
+                <div class="form-group mt-4">
+                    <input type="number" wire:model="payment" class="form-control" id="payment" placeholder="Input customer payment amount">
+                    <input type="hidden" id="total" value="{{ $summary['total'] }}">
                 </div>
+
+                <form action="" wire:submit.prevent="handleSubmit">
+                    <div>
+                        <label for="payment">Payment</label>
+                        <h1 id="paymentText" wire:ignore>Rp. 0</h1>
+                    </div>
+                    
+                    <div>
+                        <label for="kembalian">kembalian</label>
+                        <h1 id="kembalianText" wire:ignore>Rp. 0</h1>
+                    </div>
+
+                    <div class="mt-4">
+                        <button wire:ignore type="submit" class="btn btn-success btn-block" id="saveButton" disabled><i class="fas fa-save fa-lg"></i> Save Transaction</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
+
+@push('script-custom')
+    <script>
+        payment.oninput = () => {
+            const paymentAmount = document.getElementById("payment").value
+            const totalAmount = document.getElementById("total").value
+
+            const kembalian = paymentAmount - totalAmount
+        
+            document.getElementById("paymentText").innerHTML = `Rp ${rupiah(paymentAmount)} ,00`
+            document.getElementById("kembalianText").innerHTML = `Rp ${rupiah(kembalian)} ,00`
+
+            const saveButton = document.getElementById("saveButton")
+
+            if(kembalian < 0) {
+                saveButton.disabled = true
+            } else {
+                saveButton.disabled = false
+            }
+        }
+
+        const rupiah = (angka) => {
+            const numberString = angka.toString()
+            const split = numberString.split(',')
+            const sisa = split[0].length % 3
+            let rupiah = split[0].substr(0, sisa)
+            const ribuan = split[0].substr(sisa).match(/\d{1,3}/gi)
+
+            if(ribuan) {
+                const separator = sisa ? '.' : ''
+                rupiah += separator + ribuan.join('.')
+            }
+
+            return split[1] != undefined ? rupiah + ',' + split[1] : rupiah
+        }
+    </script>
+    
+@endpush
