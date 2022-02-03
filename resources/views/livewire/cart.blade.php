@@ -16,11 +16,10 @@
             <div class="card-body">
                 <div class="row">
                     @forelse ($products as $product)
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-3 mb-3" :key="{{ $product->id }}">
                         <div class="card" wire:click="addItem({{ $product->id }})" style="cursor: pointer">                           
                                 <img src="{{ asset('storage/images/'.$product->image) }}" alt="product" srcset="" style="object-fit: contain;width:100%;height:170px">
-                                <button wire:click="addItem({{ $product->id }})" class="btn btn-primary btn-sm" style="position: absolute; top:0; right:0; padding:10px 15px"><i class="fas fa-cart-plus fa-lg"></i></button>
-                                                      
+                                <button class="btn btn-primary btn-sm" style="position: absolute; top:0; right:0; padding:10px 15px"><i class="fas fa-cart-plus fa-lg"></i></button>                                            
                                 <h6 class="text-center font-weight-bold mt-2">{{ $product->name }}</h6>
                                 <h6 class="text-center font-weight-bold" style="color:grey">Rp {{number_format($product->price,2,',','.') }}</h6>                          
                         </div>
